@@ -87,7 +87,7 @@ if st.button("Add") and new_name:
         data["statuses"][new_name] = {day: "" for day in days}
         data["pfd"][new_name] = {"status": False, "last_date": today_str}
         save_data(data)
-        st.experimental_rerun()
+        st.rerun()
 
 # Remove personnel
 remove_name = st.selectbox("Remove Personnel", [""] + data["personnel"])
@@ -98,7 +98,7 @@ if st.button("Remove") and remove_name:
     if remove_name in data["pfd"]:
         del data["pfd"][remove_name]
     save_data(data)
-    st.experimental_rerun()
+    st.rerun()
 
 # Dashboard
 st.subheader("Weekly Dashboard")
