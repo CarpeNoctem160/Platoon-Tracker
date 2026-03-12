@@ -148,7 +148,7 @@ if not filtered_personnel:
 else:
     # Header row with wider day columns
     header_cols = st.columns([1, 3] + [2] * 7) # Wider name (3) and days (2 each)
-    header_cols[0].write("PFD (Today)")
+    header_cols[0].write("PFD")
     header_cols[1].write("Name")
     for i, day in enumerate(days):
         header_cols[i + 2].write(day)
@@ -156,19 +156,42 @@ else:
     # Inject CSS for wider selectboxes and colors
     st.markdown("""
     <style>
-        /* Widen selectboxes */
-        div[data-baseweb="select"] {
-            width: 150px !important; /* Adjust width as needed */
-            min-width: 150px;
+    /* Force tighter layout on mobile/narrow views */
+    @media (max-width: 768px) {
+        .stColumns > div {
+            margin-bottom: 0.1rem !important;
+            padding: 0.1rem 0 !important;
         }
-        /* Optional: Make text wrap or ellipsis if too long */
-        div[data-baseweb="select"] > div {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        section[data-testid="stHorizontalBlock"] {
+            gap: 0.2rem !important;
+            margin: 0 !important;
+            padding: 0.1rem 0 !important;
         }
-    </style>
-    """, unsafe_allow_html=True)
+        .stCheckbox, .stSelectbox {
+            margin: 0.05rem 0 !important;
+            padding: 0 !important;
+        }
+    }
+
+    /* Prevent header text wrapping/splitting */
+    .stColumns > div:first-child {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    /* Existing wider dropdowns */
+    div[data-baseweb="select"] {
+        width: 160px !important; /* Slight bump if needed for longer statuses */
+        min-width: 140px;
+    }
+
+    /* Reduce any residual ghost text/artifacts */
+    [data-testid="stMarkdownContainer"] {
+        line-height: 1.1 !important;
+    }
+</style>
+""", unsafe_allow_html=True)
 
     # Data rows
     for name in filtered_personnel:
